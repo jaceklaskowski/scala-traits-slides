@@ -66,6 +66,80 @@
 					</div>
 				</section>
 
+				<section>
+					<section data-markdown>
+						<script type="text/template">
+							## Programming in Scala, First Edition
+
+							### Chapter 12 Traits
+							by Martin Odersky, Lex Spoon, and Bill Venners<br>
+							December 10, 2008<br>
+							http://www.artima.com/pins1ed/traits.html
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## Introduction
+
+							* Traits are **a fundamental unit of code reuse** in Scala.
+							* A trait encapsulates **method and field definitions**.
+							* Reused by **mixing** them into classes
+							* A class can mix in **any number of traits**
+							* **Two** of the most common ways they are useful
+								* widening thin interfaces to rich ones
+								* defining stackable modifications
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## 12.1 How traits work
+
+							`trait` keyword defines a new trait
+
+```scala
+// example from the Akka project
+trait Actor {
+
+  def receive: Actor.Receive
+
+  type Receive = Actor.Receive
+
+}
+```
+						</script>
+					</section>
+				</section>
+
+				<section>
+					<section data-markdown>
+						<script type="text/template">
+							## Spray-Swagger project
+
+							Spray-Swagger brings [Swagger](https://github.com/wordnik/swagger-core) support for [Spray](http://spray.io/) APIs.<br>
+							https://github.com/gettyimages/spray-swagger
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+							## SwaggerHttpService
+
+							* The `SwaggerHttpService` is a trait extending Spray's `HttpService`
+						</script>
+					</section>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+					## Traits the very beginning
+
+					* Let's start with 
+					* traits are used to define object types by specifying the signature of the supported methods.
+					* Scala allows traits to be partially implemented; i.e. it is possible to define default implementations for some methods.
+					* Traits can inherit from other traits or from classes.
+					* Mixin composition in Scala occurs at compile time.
+					</script>
+				</section>
+
 				<section data-markdown>
 					<script type="text/template">
 					## Traits
