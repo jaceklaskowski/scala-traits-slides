@@ -92,20 +92,187 @@
 					</section>
 					<section data-markdown>
 						<script type="text/template">
-							## 12.1 How traits work
-
-							`trait` keyword defines a new trait
+## 12.1 How traits work
 
 ```scala
-// example from the Akka project
-trait Actor {
+package scala
 
-  def receive: Actor.Receive
+// See http://www.scala-lang.org/api/current/#scala.Function1
+trait Function1[-T1, +R] extends AnyRef {
+  def apply(v1: T1): R
+}
+```
 
-  type Receive = Actor.Receive
+* `trait` keyword defines a new trait
+* `Function1` trait has the (implicit) default superclass of `AnyRef`
+* Can be *mixed in* using either `extends` or `with` keywords
+
+```scala
+class F_Int2Int extends Function1[Int, Int] {
+  def apply(x: Int): Int = x + 1
+}
+```
+
+* `F_Int2Int` class implicitly inherit the trait's superclass - `AnyRef`
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+## trait Function1
+
+```scala
+scala> val f = new Function1[Int, Int] {
+     |   def apply(x: Int): Int = x + 1
+     | }
+f: Function1[Int,Int] = $anon$1@59020d40
+
+scala> f(0)
+res0: Int = 1
+```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+## 12.1 How traits work cont.
+
+* [scala.App](http://scala-lang.org/api/current/#scala.App) trait definition
+
+```scala
+package scala
+
+import scala.compat.Platform.currentTime
+import scala.collection.mutable.ListBuffer
+
+trait App extends DelayedInit {
+  protected def args: Array[String] = ...
+  def main(args: Array[String]) = { ... }
+}
+```
+
+* Implementation
+
+```scala
+object Main extends App {
+  Console.println("Hello World: " + (args mkString ", "))
+}
+```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+## 12.1 How traits work cont.
+
+```scala
+// from Akka's akka.actor package
+trait ActorLogging { this: Actor ⇒
+  private var _log: LoggingAdapter = _
+
+  def log: LoggingAdapter = {
+    // only used in Actor, i.e. thread safe
+    if (_log eq null)
+      _log = akka.event.Logging(context.system, this)
+    _log
+  }
 
 }
 ```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+## Speakable trait
+
+```scala
+trait Speakable {
+  def speak() = {
+    println("I am indeed speaking")
+  }
+}
+```
+
+* No explicit `extends` means `AnyRef`
+* A single definition of concrete method `speak`
+
+```scala
+scala> val s = new Speakable {}
+s: Speakable = $anon$1@22f195ea
+
+scala> s.speak
+I am indeed speaking
+```
+
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+## Speakable trait cont.
+
+```scala
+class Human extends Speakable {
+  override def speak() = {
+    println("Hello, a Human speaking")
+  }
+}
+```
+
+* Note `override` keyword to override default implementation of `speak` method
+
+```scala
+scala> val h = new Human
+h: Human = Human@962345b
+
+scala> h.speak
+Hello, a Human speaking
+```
+
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+## Trait is type
+
+* A trait also defines a type
+
+```scala
+scala> val s: Speakable = new Human
+s: Speakable = Human@65c7d581
+
+scala> s.speak
+Hello, a Human speaking
+```
+
+* `s` could have been initialized with any object that has `Speakable` mixed in
+
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+## Single extends, multiple with
+
+* Mind the singulars and plurals :-)
+
+```scala
+class Animal
+trait CanWalk
+
+class Human extends Animal with Speakable with CanWalk {
+  override def speak() = {
+    println("Hello, a Human speaking")
+  }
+}
+```
+
+* Scala allows for at most one superclass and zero or many traits
+* When no superclass is explicitly defined use `extends` for the first trait
+
+```scala
+trait CanWalk
+trait CanSing
+
+class Living extends CanWalk with CanSing
+```
+
+* What methods are part the class' API?
 						</script>
 					</section>
 				</section>
