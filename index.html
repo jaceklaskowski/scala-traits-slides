@@ -44,7 +44,8 @@
 			<div class="slides">
 				<section>
 					<h1>Scala Traits</h1>
-					<h3>Rough notes...and still not much useful</h3>
+					<h3>Rough notes...work in progress</h3>
+					<h3>Consider it as highly unlikely to be useful yet</h3>
 					<p>
 						<small>Created by <a href="http://blog.jaceklaskowski.pl">Jacek Laskowski</a> / <a href="http://twitter.com/jaceklaskowski">@jaceklaskowski</a></small>
 					</p>
@@ -449,12 +450,180 @@ res1: Int = 1
 					</script>
 				</section>
 
+		        <section>
+					<h2>Scala Language Specification</h2>
+					<h3><a href="http://www.scala-lang.org/files/archive/spec/2.11/05-classes-and-objects.html">Chapter 5 Classes and Objects</a></h3>
+		        </section>
+
+		        <section>
+					<!-- <h2>Scala Language Specification</h2> -->
+
+					<section data-markdown>
+						<script type="text/template">
+						## The code
+```
+trait SayHello {
+  def hello(s: String): String
+}
+trait SayStarredHello extends SayHello {
+  abstract override def hello(s: String): String = "***" + super.hello(s)
+}
+trait SayTildedHello extends SayHello {
+  abstract override def hello(s: String): String = "~~~" + super.hello(s)
+}
+class ReallySayHello extends SayHello {
+  def hello(s: String): String = "Hello, " + s
+}
+
+// What's the output?
+(new ReallySayHello with SayStarredHello with SayTildedHello).hello("Jacek")
+```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						## Warm-up
+
+						* You can **define new types** using **a trait** or **class** of objects or of a single **object**
+						* The superclass constructor normally refers to a class which is not a trait.
+							* When the list of parents starts with a trait reference, it's implicitly extended to include the trait's supertype until at least one constructor that does not take parameters is found.
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						## Trait
+
+						* **A class** to be added to other classes as **a mixin**
+						* It has **no constructor parameters**
+						* **Initialized after the superclass** of the trait is
+						* **Actual supertype** of a trait
+							* Gives the context for resolving a `super` reference
+							* Depends on the type to which the trait is mixed-in
+							* It is not statically known at the time the trait is defined
+						* Java interfaces can appear as mixins
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						## Trait definition
+
+						* `trait` keyword followed by *TraitDef*
+						* *TraitDef* ::= `id [TypeParamClause] TraitTemplateOpt`
+						* *TraitTemplateOpt* ::= `'extends' TraitTemplate | [['extends'] TemplateBody]`
+						* Early field definitions
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						## Trait's early definitions
+
+						* Early definitions are evaluated in the order they are being defined before the superclass constructor of the template is called.
+						* Particularly useful for traits, which do not have normal constructor parameters
+
+```
+trait Greeting {
+  val name: String
+  val msg = "How are you, "+name
+}
+class C extends {
+  val name = "Bob"
+} with Greeting {
+  println(msg)
+}
+// What's the output of the following line?
+new C
+```
+
+						* The `field` name is initialized before the constructor of `Greeting` is called
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						## Exercise
+
+						* **Define a trait** to be the property of **being comparable** to objects of some type.
+						* Let the class contain **the abstract method `<`**.
+						* Let the class contain **default implementations of the other comparison operators `<=`, `>`, and `>=`** (using `<`).
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						## Solution
+
+```
+trait Comparable[T <: Comparable[T]] { self: T =>
+  def < (that: T): Boolean
+  def <=(that: T): Boolean = this < that || this == that
+  def > (that: T): Boolean = that < this
+  def >=(that: T): Boolean = that <= this
+}
+```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						## Exercise
+
+						* **Define an object or a class of objects** with the `Comparable` just-defined trait mixed in.
+						* Test it (using [specs2](http://specs2.org) or [ScalaTest](http://scalatest.org/) testing libraries)!
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						## Solution
+
+```
+// FIXME
+```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						## abstract override
+
+						* Modifier combination **allowed for value members of traits only**
+						* Mechanism to **statically refer to abstract methods by `super` reference** in subtrait
+							* the order of the modifiers does not matter
+							* the same modifier must only occur once
+						* `super` calls are dynamically bound
+						* Described in [abstract override](http://www.scala-lang.org/files/archive/spec/2.11/05-classes-and-objects.html#abstract-override) section in Scala 2.11's language specification
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						## Exercise
+
+						* **Define another trait** that extends the `Comparable` trait to print what is compared.
+						* Test it (using [specs2](http://specs2.org) or [ScalaTest](http://scalatest.org/) testing libraries)!
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						## Solution
+
+```
+// FIXME
+```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						## abstract modifier
+
+						* **Redundant** for traits
+						* Only abstract classes and **traits can have abstract members**
+						* Can also be used in conjunction with `override` for class member definitions
+						</script>
+					</section>
+		        </section>
+
 				<section data-markdown>
 					<script type="text/template">
 					## Credits
 
 					* Hakim El Hattab for [reveal.js - The HTML Presentation Framework](http://lab.hakim.se/reveal-js/)
 					* [StackOverflow](http://stackoverflow.com/search?q=scala+trait)
+					* [Scala's Stackable Trait Pattern](http://www.artima.com/scalazine/articles/stackable_trait_pattern.html) article
 					</script>
 				</section>
 
