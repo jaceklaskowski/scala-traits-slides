@@ -617,31 +617,54 @@ trait Comparable[T <: Comparable[T]] { self: T =>
 					</section>
 		        </section>
 
-				<section data-markdown>
-					<script type="text/template">
-					## :javap in Scala REPL
+		        <section>
+					<section data-markdown>
+						<script type="text/template">
+						## :javap in Scala REPL
 
-					* Use `:javap` to learn about the nitty-gritty of bytecode generation and how it affects Java interop in Scala
+						* Use `:javap` to learn about the nitty-gritty of bytecode generation and how it affects Java interop in Scala
 
 ```
 scala> :help
 ...
 :javap <path|class>      disassemble a file or class name
 
+scala> :javap
+:javap [-lcsvp] [path1 path2 ...]
+
+scala> :javap -help
+usage       :javap [opts] [path or class or -]...
+-help       Prints this help message
+-raw        Don't unmangle REPL names
+-app        Show the DelayedInit body of Apps
+-fun        Show anonfuns for class or Class#method
+-verbose/-v Stack size, number of locals, method args
+-private/-p Private classes and members
+-package    Package-private classes and members
+-protected  Protected classes and members
+-public     Public classes and members
+-l          Line and local variable tables
+-c          Disassembled code
+-s          Internal type signatures
+-sysinfo    System info of class
+-constants  Static final constants
+```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						## Sample :javap session
+```
 scala> trait A
 defined trait A
 
-scala> :javap A
-  Size 247 bytes
-  MD5 checksum 4da06d66b945e9c3b99a967ef74c88b6
-  Compiled from "<console>"
-public interface A
-  minor version: 0
-  major version: 50
-  flags: ACC_PUBLIC, ACC_INTERFACE, ACC_ABSTRACT
-  ...
+scala> :javap -public A
+Compiled from "<console>"
+public interface A {
+}
 ```
-					</script>
+						</script>
+					</section>
 				</section>
 
 				<section data-markdown>
