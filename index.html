@@ -619,6 +619,33 @@ trait Comparable[T <: Comparable[T]] { self: T =>
 
 				<section data-markdown>
 					<script type="text/template">
+					## :javap in Scala REPL
+
+					* Use `:javap` to learn about the nitty-gritty of bytecode generation and how it affects Java interop in Scala
+
+```
+scala> :help
+...
+:javap <path|class>      disassemble a file or class name
+
+scala> trait A
+defined trait A
+
+scala> :javap A
+  Size 247 bytes
+  MD5 checksum 4da06d66b945e9c3b99a967ef74c88b6
+  Compiled from "<console>"
+public interface A
+  minor version: 0
+  major version: 50
+  flags: ACC_PUBLIC, ACC_INTERFACE, ACC_ABSTRACT
+  ...
+```
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
 					## Credits
 
 					* Hakim El Hattab for [reveal.js - The HTML Presentation Framework](http://lab.hakim.se/reveal-js/)
