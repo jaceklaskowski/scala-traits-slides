@@ -460,7 +460,7 @@ res1: Int = 1
 
 					<section data-markdown>
 						<script type="text/template">
-						## The code
+						## Code extends Intro
 ```
 trait SayHello {
   def hello(s: String): String
@@ -477,6 +477,15 @@ class ReallySayHello extends SayHello {
 
 // What's the output?
 (new ReallySayHello with SayStarredHello with SayTildedHello).hello("Jacek")
+```
+						</script>
+					</section>
+					<section data-markdown>
+						<script type="text/template">
+						## type Answer = Code
+```
+scala> (new ReallySayHello with SayStarredHello with SayTildedHello).hello("Jacek")
+res0: String = ~~~***Hello, Jacek
 ```
 						</script>
 					</section>
@@ -573,7 +582,23 @@ trait Comparable[T <: Comparable[T]] { self: T =>
 						## Solution
 
 ```
-// FIXME
+class AA(val n: Int) extends Comparable[AA] {
+  def < (that: AA) = n < that.n
+}
+```
+
+```
+scala> val one = new AA(1)
+one: AA = AA@67a667d6
+
+scala> val two = new AA(2)
+two: AA = AA@20e164a1
+
+scala> one < two
+res5: Boolean = true
+
+scala> two < one
+res6: Boolean = false
 ```
 						</script>
 					</section>
@@ -599,10 +624,15 @@ trait Comparable[T <: Comparable[T]] { self: T =>
 					</section>
 					<section data-markdown>
 						<script type="text/template">
-						## Solution
+						## Solution (FIXME)
 
 ```
-// FIXME
+trait PrintedComparable[T <: Comparable[T]] extends Comparable[T] { self: T =>
+  abstract override def < (that: T) = {
+    println(s"Executing $this < $that")
+    super.<(that)
+  }
+}
 ```
 						</script>
 					</section>
