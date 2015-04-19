@@ -1,98 +1,97 @@
 <!doctype html>
 <html lang="en">
 
-	<head>
-		<meta charset="utf-8">
+    <head>
+        <meta charset="utf-8">
 
-		<title>Scala Traits</title>
+        <title>Scala Traits</title>
 
-		<meta name="description" content="Rough notes...and still not much useful">
-		<meta name="author" content="Jacek Laskowski">
+        <meta name="description" content="Rough notes...and still not much useful">
+        <meta name="author" content="Jacek Laskowski">
 
-		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<link rel="stylesheet" href="css/reveal.min.css">
-		<link rel="stylesheet" href="css/theme/beige.css" id="theme">
+        <link rel="stylesheet" href="css/reveal.min.css">
+        <link rel="stylesheet" href="css/theme/beige.css" id="theme">
 
-		<!-- For syntax highlighting -->
-		<link rel="stylesheet" href="lib/css/zenburn.css">
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
 
-		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
-		<script>
-			if( window.location.search.match( /print-pdf/gi ) ) {
-				var link = document.createElement( 'link' );
-				link.rel = 'stylesheet';
-				link.type = 'text/css';
-				link.href = 'css/print/pdf.css';
-				document.getElementsByTagName( 'head' )[0].appendChild( link );
-			}
-		</script>
+        <!-- If the query includes 'print-pdf', include the PDF print sheet -->
+        <script>
+            if( window.location.search.match( /print-pdf/gi ) ) {
+                var link = document.createElement( 'link' );
+                link.rel = 'stylesheet';
+                link.type = 'text/css';
+                link.href = 'css/print/pdf.css';
+                document.getElementsByTagName( 'head' )[0].appendChild( link );
+            }
+        </script>
 
-		<!--[if lt IE 9]>
-		<script src="lib/js/html5shiv.js"></script>
-		<![endif]-->
-	</head>
+        <!--[if lt IE 9]>
+        <script src="lib/js/html5shiv.js"></script>
+        <![endif]-->
+    </head>
 
-	<body>
+    <body>
 
-		<div class="reveal">
+        <div class="reveal">
+            <div class="slides">
 
-			<!-- Any section element inside of this container is displayed as a slide -->
-			<div class="slides">
-				<section>
-					<h1>Scala Traits</h1>
-					<h3>Rough notes...work in progress</h3>
-					<h3>Consider it as highly unlikely to be useful yet</h3>
-					<p>
-						<small>Created by <a href="http://blog.jaceklaskowski.pl">Jacek Laskowski</a> / <a href="http://twitter.com/jaceklaskowski">@jaceklaskowski</a></small>
-					</p>
-				</section>
+                <section class="intro" data-transition="zoom">
+                    <h1>Scala Traits</h1>
+                    <h3>Rough notes...work in progress</h3>
+                    <h3>Doomed useful soon, but not today</h3>
+                    <p>
+                        <small>Delivered by <a href="http://blog.jaceklaskowski.pl">Jacek Laskowski</a> / <a href="http://twitter.com/jaceklaskowski">@jaceklaskowski</a></small>
+                    </p>
+                </section>
 
-				<section data-transition="linear" data-background-transition="slide">
-					<h2>Friendly Heads-Up</h2>
-					<div style="position: relative">
-					<p>
-						This presentation is
-						<span style="display:inline-block;position:relative">
-							a mere summary
-							<span style="position:absolute;display:inline-block;padding:4px;border-radius:10px;top:-4px;left:-4px;background-color:#eee8d5;color:#1B2C3D;font-weight:bold" class="fragment">a mere summary</span>
-						</span>
-						of what I could learn from the many sources available on the Internet.
-						<br>
-						I wholeheartedly apologise for being incompetent to yield added value besides the presentation itself.
-					</p>
-					</div>
-				</section>
+                <section data-transition="linear" data-background-transition="slide">
+                    <h2>Friendly Heads-Up</h2>
+                    <div style="position: relative">
+                    <p>
+                        This presentation is
+                        <span style="display:inline-block;position:relative">
+                            a mere summary
+                            <span style="position:absolute;display:inline-block;padding:4px;border-radius:10px;top:-4px;left:-4px;background-color:#eee8d5;color:#1B2C3D;font-weight:bold" class="fragment">a mere summary</span>
+                        </span>
+                        of what I could learn from the many sources available on the Internet.
+                        <br>
+                        I wholeheartedly apologise for being incompetent to yield added value besides the presentation itself.
+                    </p>
+                    </div>
+                </section>
 
-				<section>
-					<section data-markdown>
-						<script type="text/template">
-							## Programming in Scala, First Edition
+                <section>
+                    <section data-markdown>
+                        <script type="text/template">
+                            ## Programming in Scala, First Edition
 
-							### Chapter 12 Traits
-							by Martin Odersky, Lex Spoon, and Bill Venners<br>
-							December 10, 2008<br>
-							http://www.artima.com/pins1ed/traits.html
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-							## Introduction
+                            ### Chapter 12 Traits
+                            by Martin Odersky, Lex Spoon, and Bill Venners<br>
+                            December 10, 2008<br>
+                            http://www.artima.com/pins1ed/traits.html
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                            ## Introduction
 
-							* Traits are **a fundamental unit of code reuse** in Scala.
-							* A trait encapsulates **method and field definitions**.
-							* Reused by **mixing** them into classes
-							* A class can mix in **any number of traits**
-							* **Two** of the most common ways they are useful
-								* widening thin interfaces to rich ones
-								* defining stackable modifications
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
+                            * Traits are **a fundamental unit of code reuse** in Scala.
+                            * A trait encapsulates **method and field definitions**.
+                            * Reused by **mixing** them into classes
+                            * A class can mix in **any number of traits**
+                            * **Two** of the most common ways they are useful
+                                * widening thin interfaces to rich ones
+                                * defining stackable modifications
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
 ## 12.1 How traits work
 
 ```scala
@@ -115,10 +114,10 @@ class F_Int2Int extends Function1[Int, Int] {
 ```
 
 * `F_Int2Int` class implicitly inherit the trait's superclass - `AnyRef`
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
 ## trait Function1
 
 ```scala
@@ -130,10 +129,10 @@ f: Function1[Int,Int] = $anon$1@59020d40
 scala> f(0)
 res0: Int = 1
 ```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
 ## 12.1 How traits work cont.
 
 * [scala.App](http://scala-lang.org/api/current/#scala.App) trait definition
@@ -157,10 +156,10 @@ object Main extends App {
   Console.println("Hello World: " + (args mkString ", "))
 }
 ```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
 ## 12.1 How traits work cont.
 
 ```scala
@@ -177,10 +176,10 @@ trait ActorLogging { this: Actor ⇒
 
 }
 ```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
 ## Speakable trait
 
 ```scala
@@ -202,10 +201,10 @@ scala> s.speak
 I am indeed speaking
 ```
 
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
 ## Speakable trait cont.
 
 ```scala
@@ -226,10 +225,10 @@ scala> h.speak
 Hello, a Human speaking
 ```
 
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
 ## Trait is type
 
 * A trait also defines a type
@@ -244,10 +243,10 @@ Hello, a Human speaking
 
 * `s` could have been initialized with any object that has `Speakable` mixed in
 
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
 ## Single extends, multiple with
 
 * Mind the singulars and plurals :-)
@@ -274,55 +273,56 @@ class Living extends CanWalk with CanSing
 ```
 
 * What methods are part the class' API?
-						</script>
-					</section>
-				</section>
+                        </script>
+                    </section>
+                </section>
 
-				<section>
-					<section data-markdown>
-						<script type="text/template">
-							## Spray-Swagger project
+                <section>
+                    <section data-markdown>
+                        <script type="text/template">
+                            ## Spray-Swagger project
 
-							Spray-Swagger brings [Swagger](https://github.com/wordnik/swagger-core) support for [Spray](http://spray.io/) APIs.<br>
-							https://github.com/gettyimages/spray-swagger
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-							## SwaggerHttpService
+                            Spray-Swagger brings [Swagger](https://github.com/wordnik/swagger-core) support for [Spray](http://spray.io/) APIs.<br>
+                            https://github.com/gettyimages/spray-swagger
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                            ## SwaggerHttpService
 
-							* The `SwaggerHttpService` is a trait extending Spray's `HttpService`
-						</script>
-					</section>
-				</section>
+                            * The `SwaggerHttpService` is a trait extending Spray's `HttpService`
+                        </script>
+                    </section>
+                </section>
 
-				<section data-markdown>
-					<script type="text/template">
-					## Traits the very beginning
+                <section data-markdown>
+                    <script type="text/template">
+                    ## Traits the very beginning
 
-					* Let's start with 
-					* traits are used to define object types by specifying the signature of the supported methods.
-					* Scala allows traits to be partially implemented; i.e. it is possible to define default implementations for some methods.
-					* Traits can inherit from other traits or from classes.
-					* Mixin composition in Scala occurs at compile time.
-					</script>
-				</section>
+                    * Let's start with 
+                    * traits are used to define object types by specifying the signature of the supported methods.
+                    * Scala allows traits to be partially implemented; i.e. it is possible to define default implementations for some methods.
+                    * Traits can inherit from other traits or from classes.
+                    * Mixin composition in Scala occurs at compile time.
+                    </script>
+                </section>
 
-				<section data-markdown>
-					<script type="text/template">
-					## Traits
+                <section data-markdown>
+                    <script type="text/template">
+                    ## Traits
 
-					* Traits are useful for mixing functionality into a class.
-					* traits are used to define object types by specifying the signature of the supported methods.
-					* Scala allows traits to be partially implemented; i.e. it is possible to define default implementations for some methods.
-					* Traits can inherit from other traits or from classes.
-					* Mixin composition in Scala occurs at compile time.
-					</script>
-				</section>
+                    * Traits are useful for mixing functionality into a class.
+                    * traits are used to define object types by specifying the signature of the supported methods.
+                    * Scala allows traits to be partially implemented; i.e. it is possible to define default implementations for some methods.
+                    * Traits can inherit from other traits or from classes.
+                    * Mixin composition in Scala occurs at compile time.
+                    </script>
+                </section>
 
-				<section data-markdown>
-					<script type="text/template">
-					## Trait inheritance vs self-types (1 of 2)
+                <section>
+                  <section data-markdown>
+                      <script type="text/template">
+                      ## Trait inheritance vs self-types (1 of 2)
 
 * `A` cannot be mixed into a concrete class that does not also extend `B`, i.e. `A` *uses-a* `B`:
 
@@ -345,12 +345,11 @@ trait A[Self] {this: Self => }  // correct
 trait A[Self] extends Self      // incorrect
 ```
 
-					</script>
-				</section>
-
-				<section data-markdown>
-					<script type="text/template">
-					## Trait inheritance vs self-types (2 of 2)
+                      </script>
+                  </section>
+                  <section data-markdown>
+                      <script type="text/template">
+                      ## Trait inheritance vs self-types (2 of 2)
 
 * Self types allow you to define cyclical dependencies
 
@@ -373,12 +372,13 @@ trait Foo {
    this => { def close: Unit }
 }
 ```
-					</script>
-				</section>
+                      </script>
+                  </section>
+                </section>
 
-				<section data-markdown>
-					<script type="text/template">
-					## Cake pattern
+                <section data-markdown>
+                    <script type="text/template">
+                    ## Cake pattern
 
 ```
 trait AB {
@@ -390,14 +390,14 @@ trait B1 extends AB
 { override def fb = "B's String" }
 val myObj = new A1 with B1
 ```
-					</script>
-				</section>
+                    </script>
+                </section>
 
-				<section data-markdown>
-					<script type="text/template">
-					## Traits are stackable
+                <section data-markdown>
+                    <script type="text/template">
+                    ## Traits are stackable
 
-					* `super` calls in a trait are dynamically bound (it is referring a class or trait mixed before current one)
+                    * `super` calls in a trait are dynamically bound (it is referring a class or trait mixed before current one)
 
 ```
 trait A{
@@ -433,34 +433,34 @@ X
 Y
 res1: Int = 1
 ```
-					</script>
-				</section>
+                    </script>
+                </section>
 
-				<section data-markdown>
-					<script type="text/template">
-					## Traits vs abstract classes
+                <section data-markdown>
+                    <script type="text/template">
+                    ## Traits vs abstract classes
 
-					* **Abstract classes** can have constructor parameters as well as type parameters.
-					* **Traits** can have only type parameters.
-					* **Abstract classes** are fully interoperable with Java. You can call them from Java code without any wrappers.
-					* **Traits** are fully interoperable only if they do not contain any implementation code
-					* When you're doubt, use traits.
-					* you cannot directly extend multiple abstract classes
-					* you can mixin multiple traits into a class
-					</script>
-				</section>
+                    * **Abstract classes** can have constructor parameters as well as type parameters.
+                    * **Traits** can have only type parameters.
+                    * **Abstract classes** are fully interoperable with Java. You can call them from Java code without any wrappers.
+                    * **Traits** are fully interoperable only if they do not contain any implementation code
+                    * When you're doubt, use traits.
+                    * you cannot directly extend multiple abstract classes
+                    * you can mixin multiple traits into a class
+                    </script>
+                </section>
 
-		        <section>
-					<h2>Scala Language Specification</h2>
-					<h3><a href="http://www.scala-lang.org/files/archive/spec/2.11/05-classes-and-objects.html">Chapter 5 Classes and Objects</a></h3>
-		        </section>
+                <section>
+                    <h2>Scala Language Specification</h2>
+                    <h3><a href="http://www.scala-lang.org/files/archive/spec/2.11/05-classes-and-objects.html">Chapter 5 Classes and Objects</a></h3>
+                </section>
 
-		        <section>
-					<!-- <h2>Scala Language Specification</h2> -->
+                <section>
+                    <!-- <h2>Scala Language Specification</h2> -->
 
-					<section data-markdown>
-						<script type="text/template">
-						## Code extends Intro
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## Code extends Intro
 ```
 trait SayHello {
   def hello(s: String): String
@@ -478,56 +478,56 @@ class ReallySayHello extends SayHello {
 // What's the output?
 (new ReallySayHello with SayStarredHello with SayTildedHello).hello("Jacek")
 ```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						## type Answer = Code
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## type Answer = Code
 ```
 scala> (new ReallySayHello with SayStarredHello with SayTildedHello).hello("Jacek")
 res0: String = ~~~***Hello, Jacek
 ```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						## Warm-up
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## Warm-up
 
-						* You can **define new types** using **a trait** or **class** of objects or of a single **object**
-						* The superclass constructor normally refers to a class which is not a trait.
-							* When the list of parents starts with a trait reference, it's implicitly extended to include the trait's supertype until at least one constructor that does not take parameters is found.
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						## Trait
+                        * You can **define new types** using **a trait** or **class** of objects or of a single **object**
+                        * The superclass constructor normally refers to a class which is not a trait.
+                            * When the list of parents starts with a trait reference, it's implicitly extended to include the trait's supertype until at least one constructor that does not take parameters is found.
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## Trait
 
-						* **A class** to be added to other classes as **a mixin**
-						* It has **no constructor parameters**
-						* **Initialized after the superclass** of the trait is
-						* **Actual supertype** of a trait
-							* Gives the context for resolving a `super` reference
-							* Depends on the type to which the trait is mixed-in
-							* It is not statically known at the time the trait is defined
-						* Java interfaces can appear as mixins
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						## Trait definition
+                        * **A class** to be added to other classes as **a mixin**
+                        * It has **no constructor parameters**
+                        * **Initialized after the superclass** of the trait is
+                        * **Actual supertype** of a trait
+                            * Gives the context for resolving a `super` reference
+                            * Depends on the type to which the trait is mixed-in
+                            * It is not statically known at the time the trait is defined
+                        * Java interfaces can appear as mixins
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## Trait definition
 
-						* `trait` keyword followed by *TraitDef*
-						* *TraitDef* ::= `id [TypeParamClause] TraitTemplateOpt`
-						* *TraitTemplateOpt* ::= `'extends' TraitTemplate | [['extends'] TemplateBody]`
-						* Early field definitions
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						## Trait's early definitions
+                        * `trait` keyword followed by *TraitDef*
+                        * *TraitDef* ::= `id [TypeParamClause] TraitTemplateOpt`
+                        * *TraitTemplateOpt* ::= `'extends' TraitTemplate | [['extends'] TemplateBody]`
+                        * Early field definitions
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## Trait's early definitions
 
-						* Early definitions are evaluated in the order they are being defined before the superclass constructor of the template is called.
-						* Particularly useful for traits, which do not have normal constructor parameters
+                        * Early definitions are evaluated in the order they are being defined before the superclass constructor of the template is called.
+                        * Particularly useful for traits, which do not have normal constructor parameters
 
 ```
 trait Greeting {
@@ -543,21 +543,21 @@ class C extends {
 new C
 ```
 
-						* The `field` name is initialized before the constructor of `Greeting` is called
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						## Exercise
+                        * The `field` name is initialized before the constructor of `Greeting` is called
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## Exercise
 
-						* **Define a trait** to be the property of **being comparable** to objects of some type.
-						* Let the class contain **the abstract method `<`**.
-						* Let the class contain **default implementations of the other comparison operators `<=`, `>`, and `>=`** (using `<`).
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						## Solution
+                        * **Define a trait** to be the property of **being comparable** to objects of some type.
+                        * Let the class contain **the abstract method `<`**.
+                        * Let the class contain **default implementations of the other comparison operators `<=`, `>`, and `>=`** (using `<`).
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## Solution
 
 ```
 trait Comparable[T <: Comparable[T]] { self: T =>
@@ -567,19 +567,19 @@ trait Comparable[T <: Comparable[T]] { self: T =>
   def >=(that: T): Boolean = that <= this
 }
 ```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						## Exercise
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## Exercise
 
-						* **Define an object or a class of objects** with the `Comparable` just-defined trait mixed in.
-						* Test it (using [specs2](http://specs2.org) or [ScalaTest](http://scalatest.org/) testing libraries)!
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						## Solution
+                        * **Define an object or a class of objects** with the `Comparable` just-defined trait mixed in.
+                        * Test it (using [specs2](http://specs2.org) or [ScalaTest](http://scalatest.org/) testing libraries)!
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## Solution
 
 ```
 class AA(val n: Int) extends Comparable[AA] {
@@ -600,31 +600,31 @@ res5: Boolean = true
 scala> two < one
 res6: Boolean = false
 ```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						## abstract override
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## abstract override
 
-						* Modifier combination **allowed for value members of traits only**
-						* Mechanism to **statically refer to abstract methods by `super` reference** in subtrait
-							* the order of the modifiers does not matter
-							* the same modifier must only occur once
-						* `super` calls are dynamically bound
-						* Described in [abstract override](http://www.scala-lang.org/files/archive/spec/2.11/05-classes-and-objects.html#abstract-override) section in Scala 2.11's language specification
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						## Exercise
+                        * Modifier combination **allowed for value members of traits only**
+                        * Mechanism to **statically refer to abstract methods by `super` reference** in subtrait
+                            * the order of the modifiers does not matter
+                            * the same modifier must only occur once
+                        * `super` calls are dynamically bound
+                        * Described in [abstract override](http://www.scala-lang.org/files/archive/spec/2.11/05-classes-and-objects.html#abstract-override) section in Scala 2.11's language specification
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## Exercise
 
-						* **Define another trait** that extends the `Comparable` trait to print what is compared.
-						* Test it (using [specs2](http://specs2.org) or [ScalaTest](http://scalatest.org/) testing libraries)!
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						## Solution (FIXME)
+                        * **Define another trait** that extends the `Comparable` trait to print what is compared.
+                        * Test it (using [specs2](http://specs2.org) or [ScalaTest](http://scalatest.org/) testing libraries)!
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## Solution (FIXME)
 
 ```
 trait PrintedComparable[T <: Comparable[T]] extends Comparable[T] { self: T =>
@@ -634,25 +634,29 @@ trait PrintedComparable[T <: Comparable[T]] extends Comparable[T] { self: T =>
   }
 }
 ```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						## abstract modifier
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## abstract modifier
 
-						* **Redundant** for traits
-						* Only abstract classes and **traits can have abstract members**
-						* Can also be used in conjunction with `override` for class member definitions
-						</script>
-					</section>
-		        </section>
+                        * **Redundant** for traits
+                        * Only abstract classes and **traits can have abstract members**
+                        * Can also be used in conjunction with `override` for class member definitions
+                        </script>
+                    </section>
+                </section>
 
-		        <section>
-					<section data-markdown>
-						<script type="text/template">
-						## :javap in Scala REPL
+                <section>
+                    <h2>Javap</h2>
+                    <h3><a href="http://docs.oracle.com/javase/8/docs/technotes/tools/unix/javap.html">The Java Class File Disassembler</a></h3>
+                </section>
+                <section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## :javap in Scala REPL
 
-						* Use `:javap` to learn about the nitty-gritty of bytecode generation and how it affects Java interop in Scala
+                        * Use `:javap` to learn about the nitty-gritty of bytecode generation and how it affects Java interop in Scala
 
 ```
 scala> :help
@@ -679,11 +683,11 @@ usage       :javap [opts] [path or class or -]...
 -sysinfo    System info of class
 -constants  Static final constants
 ```
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-						## Sample :javap session
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## Sample :javap session
 ```
 scala> trait A
 defined trait A
@@ -693,64 +697,146 @@ Compiled from "<console>"
 public interface A {
 }
 ```
-						</script>
-					</section>
-				</section>
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## :javap class
+```
+scala> class Person(name: String)
+defined class Person
+```
 
-				<section data-markdown>
-					<script type="text/template">
-					## Credits
+```
+scala> :javap -public Person
+Compiled from "<console>"
+public class Person {
+  public Person(java.lang.String);
+}
+```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## :javap class with val
+```
+scala> class Person(val name: String)
+defined class Person
+```
 
-					* Hakim El Hattab for [reveal.js - The HTML Presentation Framework](http://lab.hakim.se/reveal-js/)
-					* [StackOverflow](http://stackoverflow.com/search?q=scala+trait)
-					* [Scala's Stackable Trait Pattern](http://www.artima.com/scalazine/articles/stackable_trait_pattern.html) article
-					</script>
-				</section>
+```
+scala> :javap -public Person
+Compiled from "<console>"
+public class Person {
+  public java.lang.String name();
+  public Person(java.lang.String);
+}
+```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## :javap class with var
+```
+scala> class Person(var name: String)
+defined class Person
+```
 
-				<section data-markdown>
-					<script type="text/template">
-					# The End
+```
+scala> :javap -public Person
+Compiled from "<console>"
+public class Person {
+  public java.lang.String name();
+  public void name_$eq(java.lang.String);
+  public Person(java.lang.String);
+}
+```
+                        </script>
+                    </section>
+                    <section data-markdown>
+                        <script type="text/template">
+                        ## :javap case class
+```
+scala> case class Person(name: String)
+defined class Person
+```
 
-					### BY Jacek Laskowski / [blog.jaceklaskowski.pl](http://blog.jaceklaskowski.pl)
-					</script>
-				</section>
+```
+scala> :javap -public Person
+Compiled from "<console>"
+public class Person implements scala.Product,scala.Serializable {
+  public java.lang.String name();
+  public Person copy(java.lang.String);
+  public java.lang.String copy$default$1();
+  public java.lang.String productPrefix();
+  public int productArity();
+  public java.lang.Object productElement(int);
+  public scala.collection.Iterator<java.lang.Object> productIterator();
+  public boolean canEqual(java.lang.Object);
+  public int hashCode();
+  public java.lang.String toString();
+  public boolean equals(java.lang.Object);
+  public Person(java.lang.String);
+}
+```
+                        </script>
+                    </section>
+                </section>
 
-			</div>
+                <section data-markdown>
+                    <script type="text/template">
+                    ## Credits
 
-		</div>
+                    * Hakim El Hattab for [reveal.js - The HTML Presentation Framework](http://lab.hakim.se/reveal-js/)
+                    * [StackOverflow](http://stackoverflow.com/search?q=scala+trait)
+                    * [Scala's Stackable Trait Pattern](http://www.artima.com/scalazine/articles/stackable_trait_pattern.html) article
+                    </script>
+                </section>
 
-		<script src="lib/js/head.min.js"></script>
-		<script src="js/reveal.min.js"></script>
+                <section data-markdown>
+                    <script type="text/template">
+                    # The End
 
-		<script>
+                    ### BY Jacek Laskowski / [blog.jaceklaskowski.pl](http://blog.jaceklaskowski.pl)
+                    </script>
+                </section>
 
-			// Full list of configuration options available here:
-			// https://github.com/hakimel/reveal.js#configuration
-			Reveal.initialize({
-				controls: true,
-				progress: true,
-				history: true,
-				center: true,
+            </div>
 
-				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
-				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+        </div>
 
-				// Parallax scrolling
-				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
-				// parallaxBackgroundSize: '2100px 900px',
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.min.js"></script>
 
-				// Optional libraries used to extend on reveal.js
-				dependencies: [
-					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
-					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
-					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
-				]
-			});
+        <script>
 
-		</script>
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                center: true,
 
-	</body>
+                theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+                transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+                // Parallax scrolling
+                // parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+                // parallaxBackgroundSize: '2100px 900px',
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+                    { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+                    { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+                ]
+            });
+
+        </script>
+
+    </body>
 </html>
